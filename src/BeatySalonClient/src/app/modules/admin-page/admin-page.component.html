@@ -1,0 +1,67 @@
+<!-- admin-page.component.html -->
+<div class="admin-page-container">
+  <div class="title-container">
+    <h2>Employee List</h2>
+
+    <button (click)="addEmployee()">Add Employee</button>
+  </div>
+  <div *ngIf="showAddForm" id="add-edit-form" class="add-employee-form">
+    <form (submit)="submitEmployeeForm()">
+      <label for="name">Name:</label>
+      <input type="text" id="name" [(ngModel)]="newEmployee.name" name="name" required pattern="^[a-zA-Z ]*$">
+      <label for="name">Surname:</label>
+      <input type="text" id="surname" [(ngModel)]="newEmployee.surname" name="surname" required pattern="^[a-zA-Z ]*$">
+      <label for="position">Position:</label>
+      <input type="text" id="position" [(ngModel)]="newEmployee.position" name="position" required pattern="^\\d">
+
+      <label for="birthday">Birthday:</label>
+      <input type="date" id="birthday" [(ngModel)]="newEmployee.birthday" name="birthday" required max="2005-01-01">
+
+      <label for="phoneNumber">Phone Number:</label>
+      <input type="text" id="phoneNumber" [(ngModel)]="newEmployee.phoneNumber" name="phoneNumber" required>
+
+      <label for="paymentPercent">Payment Percent:</label>
+      <input type="number" id="paymentPercent" [(ngModel)]="newEmployee.paymentPercent" name="paymentPercent" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" [(ngModel)]="newEmployee.email" name="email" required #email="ngModel">
+      <div *ngIf="email.invalid && (email.dirty || email.touched)">
+        <div *ngIf="email.errors?.['required']">Email is required.</div>
+        <div *ngIf="email.errors?.['email']">Invalid email format.</div>
+      </div>
+      <div class="button-container">
+        <button type="button" (click)="addEmployee()">Cancel</button>
+        <button type="submit" [disabled]="!newEmployee.name || !newEmployee.surname">Save</button>
+      </div>
+    </form>
+  </div>
+  <table class="employee-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Position</th>
+        <th>Birthday</th>
+        <th>Phone Number</th>
+        <th>Payment Percent</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let employee of employees" appHighlight [appHighlightColor]="'lightblue'">
+        <td>{{ employee.name }}</td>
+        <td>{{ employee.surname }}</td>
+        <td>{{ employee.position }}</td>
+        <td>{{ employee.birthday | date }}</td>
+        <td>{{ employee.phoneNumber | phoneFormat}}</td>
+        <td>{{ employee.paymentPercent }}</td>
+        <td>{{ employee.email }}</td>
+        <td class="button-container">
+          <button (click)="editEmployee(employee.id)">Edit</button>
+          <button (click)="deleteEmployee(employee.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
